@@ -44,7 +44,7 @@ class Advertisement(models.Model):
     @admin.display(description='Изображение')
     def image_admin(self):
          if self.image:
-             return format_html('<img src="{}" width="50" height="50" />', self.image.url)
+             return format_html('<img src="{}" width="80" height="80" />', url=self.image.url)
          else:
              return '(Нет изображения)'
 
