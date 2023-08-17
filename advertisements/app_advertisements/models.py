@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib import admin
 from django.utils import timezone
 from django.utils.html import format_html
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 # Create your models here.
 
 class Advertisement(models.Model):
@@ -12,6 +15,8 @@ class Advertisement(models.Model):
     auction = models.BooleanField('Торг', help_text='Отметьте, если торг уместен')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, verbose_name='пользователь', on_delete=models.CASCADE)
+    image = models.ImageField('Изображение', upload_to='advertisements/')
 
     def __str__(self):
         return f"Advertisement(id={self.id}, title={self.title}, price={self.price}"
@@ -35,6 +40,13 @@ class Advertisement(models.Model):
             )
         else:
             return self.updated_at.strftime("%d.%m.%Y в %H:%M:%S")
+
+    @admin.display(description='Изображение')
+    def image_admin(self):
+         if self.image:  # Замените 'image_field' на имя вашего поля с картинкой
+             return format_html('<img src="{}" width="50" height="50" />', self.image.url)
+         else:
+             return '(Нет изображения)'
 
 
 
